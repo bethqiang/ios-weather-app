@@ -8,7 +8,7 @@
 
 import UIKit
 
-class WeatherVC: UIViewController {
+class WeatherVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var currentTempLabel: UILabel!
@@ -19,6 +19,26 @@ class WeatherVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //add delegate and data source
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+    
+    //required delegate methods for table views
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 6
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "weatherCell", for: indexPath) //looks for a cell with the identifier that you provide
+        return cell
     }
 
 }

@@ -51,9 +51,9 @@ class WeatherVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                     for obj in list {
                         let forecast = Forecast(weatherDict: obj) //for every forecast, we add it to a dictionary somewhere else
                         self.forecasts.append(forecast) //append to our forecast array
-                        print(obj)
                     }
-                    
+                    self.forecasts.remove(at: 0)
+                    self.tableView.reloadData()
                 }
                 
             }
@@ -68,13 +68,18 @@ class WeatherVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 6
+        return forecasts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "weatherCell", for: indexPath) //looks for a cell with the identifier that you provide
-        return cell
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "weatherCell", for: indexPath) as? WeatherCell { //looks for a cell with the identifier that you provide
+            let forecast = forecasts[indexPath.row] //each cell created gets an indexPath
+            cell.configureCell(forecast: forecast) //pass in forecast
+            return cell
+        } else {
+            return WeatherCell()
+        }
     }
     
     func updateMainUI() {
